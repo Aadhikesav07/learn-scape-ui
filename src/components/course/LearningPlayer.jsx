@@ -1,39 +1,42 @@
-import { useEffect, useState } from 'react';
-import { useStore } from '../../store/useStore';
-import { useParams } from 'react-router-dom';
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { useStore } from "../../store/useStore";
 
-export default function LearningPlayer({ videoUrl, lectureId }) {
+const CourseDetails = () => {
   const { courseId } = useParams();
-  const { updateProgress } = useStore();
-  const [isPlaying, setIsPlaying] = useState(false);
+  const { courses, enrolledCourses, enrollCourse } = useStore();
+  const course = courses.find(c => c.id === Number(courseId));
+  if (!course) return <div>Course not found.</div>;
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isPlaying) {
-        updateProgress(courseId, lectureId);
-      }
-    }, 5000); // Mark complete after 5 seconds
-
-    return () => clearTimeout(timer);
-  }, [isPlaying, lectureId, courseId, updateProgress]);
+  const enrolled = enrolledCourses.includes(course.id);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4">
-      <div className="aspect-video bg-black rounded-lg overflow-hidden mb-4">
-        <iframe
-          width="100%"
-          height="100%"
-          src={videoUrl}
-          title="Lecture Video"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          onLoad={() => setIsPlaying(true)}
-        ></iframe>
-      </div>
-      <div className="bg-blue-50 p-3 rounded text-blue-800 text-sm">
-        ⏱️ Lecture will be marked as complete after watching for 5 seconds.
-      </div>
+    <div className="max-w-2xl mx-auto my-8 p-6 bg-white rounded shadow">
+      <img src={course.thumbnail} alt="thumbnail" className="h-36 mb-4"/>
+      <h2 className="text-2xl font-bold">{course.title}</h2>
+      <p className="text-gray-700 mt-2">Instructor: {course.instructor}</p>
+      <div className="mt-4 text-gray-800">{course.description}</div>
+      <h3 className="mt-4 font-semibold">Syllabus:</h3>
+      {course.syllabus.map((mod, idx) => (
+        <div key={idx} className="mb-2">
+          <div className="font-medium text-blue-600">{mod.module}:</div>
+          <ul className="ml-4">
+            {mod.lectures.map((lec, i) => <li key={i}>{lec}</li>)}
+          </ul>
+        </div>
+      ))}
+      <button
+        className={`mt-4 px-4 py-2 rounded text-white ${enrolled ? "bg-green-500" : "bg-blue-500"}`}
+        onClick={() => !enrolled && enrollCourse(course.id)}
+        disabled={enrolled}
+      >
+        {enrolled ? "Enrolled" : "Enroll"}
+      </button>
+      {enrolled && (
+        <Link className="ml-4 text-blue-600" to={`/learning/${course.id}`}>Go to Course</Link>
+      )}
     </div>
   );
-}
+};
+
+export default CourseDetails;
