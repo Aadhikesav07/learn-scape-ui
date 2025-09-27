@@ -1,50 +1,35 @@
-import { NavLink } from 'react-router-dom';
+import React from "react";
+import { Link, useParams } from "react-router-dom";
+import { useStore } from "../../store/useStore";
 
-export default function Sidebar({ course }) {
+const Sidebar = ({ courseId }) => {
+  const { courses } = useStore();
+  const course = courses.find(c => c.id === Number(courseId));
+
   if (!course) return null;
 
   return (
-    <aside className="w-64 bg-gray-50 p-4 h-screen sticky top-0 overflow-y-auto border-r">
-      <h3 className="font-bold text-lg mb-4 border-b pb-2">📚 Course Content</h3>
-      {course.modules.map(module => (
-        <div key={module.id} className="mb-6">
-          <h4 className="font-semibold text-gray-800 mb-2">{module.title}</h4>
-          <ul className="space-y-1">
-            {module.lectures.map(lecture => (
-              <li key={lecture.id}>
-                <NavLink
-                  to={`/learning/${course.id}/lecture/${lecture.id}`}
-                  className={({ isActive }) =>
-                    `block px-3 py-2 rounded text-sm ${
-                      isActive
-                        ? 'bg-blue-100 text-blue-800 font-medium'
-                        : 'text-gray-700 hover:bg-gray-200'
-                    }`
-                  }
-                >
-                  ▶️ {lecture.title}
-                </NavLink>
-              </li>
-            ))}
-            {module.quizzes.map(quiz => (
-              <li key={quiz.id}>
-                <NavLink
-                  to={`/learning/${course.id}/quiz/${quiz.id}`}
-                  className={({ isActive }) =>
-                    `block px-3 py-2 rounded text-sm ${
-                      isActive
-                        ? 'bg-blue-100 text-blue-800 font-medium'
-                        : 'text-gray-700 hover:bg-gray-200'
-                    }`
-                  }
-                >
-                  ❓ {quiz.title}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
+    <aside className="bg-gray-100 p-4 w-60">
+      <div className="font-semibold mb-2 text-xl">{course.title}</div>
+      <nav>
+        {course.syllabus.map((mod, idx) =>
+          <div key={idx} className="mt-4">
+            <div className="text-lg text-blue-600">{mod.module}</div>
+            <ul className="ml-2">
+              {mod.lectures.map((lec,i) =>
+                <li key={i} className="py-1">
+                  <Link to={`/learning/${course.id}#${mod.module}-${lec}`}>{lec}</Link>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+        <div className="mt-4">
+          <Link to={`/quiz/${course.id}/1`} className="text-blue-500">Quiz</Link>
         </div>
-      ))}
+      </nav>
     </aside>
   );
-}
+};
+
+export default Sidebar;
