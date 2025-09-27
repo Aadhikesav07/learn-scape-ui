@@ -1,61 +1,42 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useStore } from '../../store/useStore';
-import { mockCourses } from '../../utils/mockData';
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { useStore } from "../../store/useStore";
 
-export default function CourseDetails() {
+const CourseDetails = () => {
   const { courseId } = useParams();
-  const navigate = useNavigate();
-  const { user, enrollInCourse } = useStore();
+  const { courses, enrolledCourses, enrollCourse } = useStore();
+  const course = courses.find(c => c.id === Number(courseId));
+  if (!course) return <div>Course not found.</div>;
 
-  const course = mockCourses.find(c => c.id == courseId);
-
-  if (!course) {
-    return <div className="container mx-auto py-10 text-center">Course not found.</div>;
-  }
-
-  const handleEnroll = () => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-    enrollInCourse(course.id);
-    navigate(`/learning/${course.id}`);
-  };
+  const enrolled = enrolledCourses.includes(course.id);
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-1">
-            <img
-              src={course.thumbnail}
-              alt={course.title}
-              className="w-full rounded-lg shadow-md"
-            />
-          </div>
-          <div className="md:col-span-2">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">{course.title}</h1>
-            <p className="text-lg text-gray-700 mb-4">Instructor: <span className="font-medium">{course.instructor}</span></p>
-            <p className="text-gray-800 mb-6 leading-relaxed">{course.description}</p>
-
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-3">📝 Syllabus</h3>
-              <ul className="list-disc list-inside space-y-1 text-gray-700">
-                {course.syllabus.map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </div>
-
-            <button
-              onClick={handleEnroll}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition transform hover:scale-105"
-            >
-              {user ? 'Enroll Now' : 'Login to Enroll'}
-            </button>
-          </div>
+    <div className="max-w-2xl mx-auto my-8 p-6 bg-white rounded shadow">
+      <img src={course.thumbnail} alt="thumbnail" className="h-36 mb-4"/>
+      <h2 className="text-2xl font-bold">{course.title}</h2>
+      <p className="text-gray-700 mt-2">Instructor: {course.instructor}</p>
+      <div className="mt-4 text-gray-800">{course.description}</div>
+      <h3 className="mt-4 font-semibold">Syllabus:</h3>
+      {course.syllabus.map((mod, idx) => (
+        <div key={idx} className="mb-2">
+          <div className="font-medium text-blue-600">{mod.module}:</div>
+          <ul className="ml-4">
+            {mod.lectures.map((lec, i) => <li key={i}>{lec}</li>)}
+          </ul>
         </div>
-      </div>
+      ))}
+      <button
+        className={`mt-4 px-4 py-2 rounded text-white ${enrolled ? "bg-green-500" : "bg-blue-500"}`}
+        onClick={() => !enrolled && enrollCourse(course.id)}
+        disabled={enrolled}
+      >
+        {enrolled ? "Enrolled" : "Enroll"}
+      </button>
+      {enrolled && (
+        <Link className="ml-4 text-blue-600" to={`/learning/${course.id}`}>Go to Course</Link>
+      )}
     </div>
   );
-}
+};
+
+export default CourseDetails;
