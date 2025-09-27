@@ -1,26 +1,16 @@
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-export default function CourseCard({ course }) {
-  return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border">
-      <img
-        src={course.thumbnail}
-        alt={course.title}
-        className="w-full h-48 object-cover"
-      />
-      <div className="p-5">
-        <h3 className="font-bold text-lg text-gray-900 mb-2">{course.title}</h3>
-        <p className="text-sm text-gray-600 mb-3">by {course.instructor}</p>
-        <p className="text-gray-700 text-sm mb-4 line-clamp-2">
-          {course.description}
-        </p>
-        <Link
-          to={`/course/${course.id}`}
-          className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        >
-          View Details
-        </Link>
-      </div>
-    </div>
-  );
-}
+const CourseCard = ({ course }) => (
+  <div className="rounded shadow bg-white p-4 flex flex-col">
+    <img src={course.thumbnail} className="h-32 object-cover mb-3" alt="thumbnail"/>
+    <div className="font-bold text-lg mb-1">{course.title}</div>
+    <div className="text-sm text-gray-700">By {course.instructor}</div>
+    <div className="text-gray-600 text-sm mt-1">{course.description}</div>
+    <Link to={`/course/${course.id}`} className="mt-4 bg-blue-500 text-white px-3 py-1 rounded text-center">
+      View Details
+    </Link>
+  </div>
+);
+
+export default CourseCard;
