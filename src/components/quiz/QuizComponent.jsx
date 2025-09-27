@@ -1,70 +1,69 @@
-import { useState } from 'react';
-import { useStore } from '../../store/useStore';
+import React, { useState } from "react";
 
-export default function QuizComponent({ quiz, courseId }) {
-  const [answers, setAnswers] = useState({});
-  const [submitted, setSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
-  const { submitQuiz } = useStore();
-
-  const handleAnswerChange = (questionIndex, selectedOption) => {
-    setAnswers(prev => ({ ...prev, [questionIndex]: selectedOption }));
-  };
-
-  const handleSubmit = () => {
-    let calculatedScore = 0;
-    quiz.questions.forEach((q, idx) => {
-      if (answers[idx] === q.answer) calculatedScore += 1;
-    });
-    const finalScore = (calculatedScore / quiz.questions.length) * 100;
-    setScore(finalScore);
-    setSubmitted(true);
-    submitQuiz(courseId, quiz.id, finalScore);
-  };
-
-  if (submitted) {
-    return (
-      <div className="p-6 bg-green-50 border border-green-200 rounded-lg max-w-3xl mx-auto">
-        <h3 className="text-2xl font-bold text-green-800 mb-2">✅ Quiz Submitted!</h3>
-        <p className="text-lg">Your Score: <span className="font-bold text-green-700">{score.toFixed(1)}%</span></p>
-        {score >= 70 ? (
-          <p className="mt-3 text-green-700 font-medium">🎉 Congratulations! You’re eligible for a certificate.</p>
-        ) : (
-          <p className="mt-3 text-yellow-700">You need at least 70% to qualify for a certificate.</p>
-        )}
-      </div>
-    );
+const sampleQuiz = [
+  {
+    id: 1,
+    question: "Which library is used for state management?",
+    options: ["Redux", "Express", "MongoDB", "Tailwind CSS"],
+    answer: 0
+  },
+  {
+    id: 2,
+    question: "What is React?",
+    options: ["Database", "UI Library", "Backend framework", "Browser"],
+    answer: 1
   }
+];
+
+const QuizComponent = () => {
+  const [responses, setResponses] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [score, setScore] = useState(null);
+
+  const handleChange = (qId, optionIdx) => {
+    setResponses({ ...responses, [qId]: optionIdx });
+  };
+
+  const submitQuiz = () => {
+    let scr = 0;
+    sampleQuiz.forEach(q => {
+      if (responses[q.id] === q.answer) scr++;
+    });
+    setScore(scr);
+    setSubmitted(true);
+  };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">{quiz.title}</h2>
-      {quiz.questions.map((q, idx) => (
-        <div key={idx} className="mb-6 p-4 border rounded">
-          <p className="font-medium mb-3">{idx + 1}. {q.q}</p>
-          <div className="space-y-2">
+    <div className="bg-white rounded shadow p-6 max-w-lg mx-auto mt-8">
+      <h2 className="font-bold text-xl mb-4">Quiz</h2>
+      {sampleQuiz.map((q, idx) => (
+        <div key={q.id} className="mb-4">
+          <div className="font-medium">{idx + 1}. {q.question}</div>
+          <div className="mt-2">
             {q.options.map((opt, i) => (
-              <label key={i} className="flex items-center space-x-2">
+              <label key={i} className="block px-2 py-1 cursor-pointer">
                 <input
                   type="radio"
-                  name={`q${idx}`}
+                  name={`q${q.id}`}
                   value={i}
-                  onChange={() => handleAnswerChange(idx, i)}
-                  className="form-radio text-blue-600"
+                  checked={responses[q.id] === i}
+                  disabled={submitted}
+                  onChange={() => handleChange(q.id, i)}
+                  className="mr-2"
                 />
-                <span>{opt}</span>
+                {opt}
               </label>
             ))}
           </div>
         </div>
       ))}
-      <button
-        onClick={handleSubmit}
-        disabled={Object.keys(answers).length !== quiz.questions.length}
-        className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 disabled:bg-gray-400 font-medium mt-4"
-      >
-        Submit Quiz
-      </button>
+      {!submitted ? (
+        <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={submitQuiz}>Submit</button>
+      ) : (
+        <div className="mt-4 text-lg">Score: {score} / {sampleQuiz.length}</div>
+      )}
     </div>
   );
-}
+};
+
+export default QuizComponent;
