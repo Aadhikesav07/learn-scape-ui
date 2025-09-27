@@ -1,32 +1,27 @@
-import { useStore } from '../../store/useStore';
+import React from "react";
+import { useStore } from "../../store/useStore";
+import { Link } from "react-router-dom";
 
-export default function ProfileDashboard() {
-  const { user } = useStore();
-
-  if (!user) return <div>Please login to view profile.</div>;
-
+const ProfileDashboard = () => {
+  const { user, enrolledCourses, courses } = useStore();
   return (
-    <div className="container mx-auto py-10 max-w-3xl">
-      <div className="bg-white rounded-lg shadow p-8">
-        <h2 className="text-2xl font-bold mb-6">👤 User Profile</h2>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-gray-600">Name</label>
-            <p className="font-medium">{user.name}</p>
-          </div>
-          <div>
-            <label className="block text-gray-600">Email</label>
-            <p className="font-medium">{user.email}</p>
-          </div>
-          <div>
-            <label className="block text-gray-600">Role</label>
-            <p className="font-medium capitalize">{user.role}</p>
-          </div>
-        </div>
-        <button className="mt-6 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded">
-          Edit Profile
-        </button>
-      </div>
+    <div className="bg-white rounded shadow p-6 max-w-xl mx-auto mt-8">
+      <img src={user.profilePic} className="h-16 w-16 rounded-full mb-3" alt="profile"/>
+      <div className="text-xl font-bold">{user.name}</div>
+      <div className="text-gray-700 mb-2">{user.email}</div>
+      <h3 className="mt-4 font-semibold">Enrolled Courses</h3>
+      <ul>
+        {enrolledCourses.map((cid) =>
+          <li key={cid}>
+            <Link to={`/course/${cid}`} className="text-blue-700">
+              {courses.find(c => c.id === cid)?.title || "Untitled"}
+            </Link>
+          </li>
+        )}
+      </ul>
+      <Link className="mt-4 block text-blue-500" to={`/certificate/1`}>View Certificate [sample]</Link>
     </div>
   );
-}
+};
+
+export default ProfileDashboard;
