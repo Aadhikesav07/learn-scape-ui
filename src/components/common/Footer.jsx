@@ -1,8 +1,7 @@
-import React from "react";
-const Footer = () => (
-  <footer className="bg-white mt-8 py-3 text-center text-gray-500">
-    © 2025 LearnScape. All rights reserved.
-  </footer>
-);
-
-export default Footer;
+export default function Footer() {
+  return (
+    <footer className="bg-gray-800 text-gray-300 text-center py-4">
+      © {new Date().getFullYear()} LearnScape. All rights reserved.
+    </footer>
+  )
+}
