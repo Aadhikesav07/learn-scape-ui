@@ -1,31 +1,39 @@
-import React, { useState } from "react";
-import { useStore } from "../store/useStore";
-import { useNavigate } from "react-router-dom";
-import Input from "../components/ui/Input";
-import Button from "../components/ui/Button";
+import { useState } from "react"
+import Input from "../components/ui/Input"
+import Button from "../components/ui/Button"
+import { useNavigate } from "react-router-dom"
+import { useStore } from "../store/useStore"
 
-const RegisterPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const { login } = useStore();
-  const navigate = useNavigate();
+export default function RegisterPage() {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [role, setRole] = useState("student")
+  const navigate = useNavigate()
+  const { login } = useStore()
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    login({ name, email, role: "student", profilePic: "/assets/logo.png" });
-    navigate("/dashboard/student");
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    login({ name, email, role })
+    navigate("/dashboard")
+  }
 
   return (
-    <div className="max-w-md mx-auto mt-24 bg-white rounded shadow p-8">
-      <h2 className="text-xl font-bold mb-4">Register</h2>
+    <div className="max-w-md mx-auto bg-white p-6 shadow rounded mt-12">
+      <h1 className="text-2xl font-bold mb-4">Register</h1>
       <form onSubmit={handleSubmit}>
-        <Input type="text" placeholder="Name" required value={name} onChange={e => setName(e.target.value)} />
-        <Input type="email" placeholder="Email" required value={email} onChange={e => setEmail(e.target.value)} />
-        <Button type="submit">Register</Button>
+        <Input label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+        <Input label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+
+        <div className="mb-4">
+          <label className="block mb-1">Role:</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full border px-3 py-2 rounded">
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+          </select>
+        </div>
+
+        <Button type="submit" className="w-full">Register</Button>
       </form>
     </div>
-  );
-};
-
-export default RegisterPage;
+  )
+}
