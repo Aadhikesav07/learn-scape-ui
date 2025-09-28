@@ -1,14 +1,13 @@
-import React from "react";
-const CertificateComponent = ({ cert }) => (
-  <div className="bg-white shadow p-6 rounded max-w-xl mx-auto mt-8 text-center">
-    <h2 className="text-2xl font-bold">Digital Certificate</h2>
-    <div className="mt-4 font-semibold text-lg">{cert.courseName}</div>
-    <div className="mt-2">Awarded to <span className="font-bold">{cert.userName}</span></div>
-    <div className="mt-2">Date: {cert.date}</div>
-    <div className="mt-2">Score: {cert.score}</div>
-    <img src={cert.qrCode} alt="QR" className="mx-auto mt-3 h-16"/>
-    <div className="mt-2 text-blue-600">Verify: <a href={cert.verifyUrl}>{cert.verifyUrl}</a></div>
-  </div>
-);
+import { QRCodeSVG } from "qrcode.react"
 
-export default CertificateComponent;
+export default function CertificateComponent({ cert }) {
+  return (
+    <div className="bg-white p-6 rounded shadow text-center max-w-lg mx-auto">
+      <h2 className="text-2xl font-bold mb-2">Certificate of Completion</h2>
+      <p className="mb-2">{cert.studentName}</p>
+      <p className="mb-2">Course: {cert.courseName}</p>
+      <p className="mb-4">Score: {cert.score}%</p>
+      <QRCodeSVG value={cert.link} size={128} />
+    </div>
+  )
+}
