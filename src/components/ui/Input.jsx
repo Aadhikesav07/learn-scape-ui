@@ -1,10 +1,11 @@
-import React from "react";
-
-const Input = ({ ...props }) => (
-  <input
-    {...props}
-    className="border rounded px-3 py-2 w-full mb-2"
-  />
-);
-
-export default Input;
+export default function Input({ label, ...props }) {
+  return (
+    <div className="mb-4">
+      <label className="block mb-1">{label}</label>
+      <input
+        {...props}
+        className="w-full border px-3 py-2 rounded"
+      />
+    </div>
+  )
+}
