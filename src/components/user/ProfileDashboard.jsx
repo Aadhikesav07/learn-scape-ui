@@ -1,27 +1,21 @@
-import React from "react";
-import { useStore } from "../../store/useStore";
-import { Link } from "react-router-dom";
+import { useStore } from "../../store/useStore"
 
-const ProfileDashboard = () => {
-  const { user, enrolledCourses, courses } = useStore();
+export default function ProfileDashboard() {
+  const { user, courses } = useStore()
+
   return (
-    <div className="bg-white rounded shadow p-6 max-w-xl mx-auto mt-8">
-      <img src={user.profilePic} className="h-16 w-16 rounded-full mb-3" alt="profile"/>
-      <div className="text-xl font-bold">{user.name}</div>
-      <div className="text-gray-700 mb-2">{user.email}</div>
-      <h3 className="mt-4 font-semibold">Enrolled Courses</h3>
-      <ul>
-        {enrolledCourses.map((cid) =>
-          <li key={cid}>
-            <Link to={`/course/${cid}`} className="text-blue-700">
-              {courses.find(c => c.id === cid)?.title || "Untitled"}
-            </Link>
-          </li>
-        )}
-      </ul>
-      <Link className="mt-4 block text-blue-500" to={`/certificate/1`}>View Certificate [sample]</Link>
+    <div>
+      <div className="bg-white p-6 mb-6 rounded shadow">
+        <h2 className="text-xl font-bold">Profile</h2>
+        <p>{user?.name}</p>
+        <p>{user?.email}</p>
+      </div>
+      <div>
+        <h2 className="text-xl font-bold mb-3">My Courses</h2>
+        <ul>
+          {courses.map((c) => <li key={c.id}>{c.title}</li>)}
+        </ul>
+      </div>
     </div>
-  );
-};
-
-export default ProfileDashboard;
+  )
+}
