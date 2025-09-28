@@ -1,17 +1,12 @@
-import create from "zustand";
-import { mockCourses, mockUser, mockCertificates } from "../utils/mockData";
+import { create } from "zustand"
+import { mockCourses, mockQuizzes, mockCertificates } from "../utils/mockData"
 
 export const useStore = create((set) => ({
-  user: mockUser,
+  user: null,
   courses: mockCourses,
+  quizzes: mockQuizzes,
   certificates: mockCertificates,
-  enrolledCourses: [],
+
   login: (user) => set({ user }),
   logout: () => set({ user: null }),
-  enrollCourse: (courseId) =>
-    set((state) => ({
-      enrolledCourses: state.enrolledCourses.includes(courseId)
-        ? state.enrolledCourses
-        : [...state.enrolledCourses, courseId]
-    }))
-}));
+}))
