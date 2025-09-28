@@ -1,35 +1,26 @@
-import React from "react";
-import { Link, useParams } from "react-router-dom";
-import { useStore } from "../../store/useStore";
+import { NavLink } from "react-router-dom"
 
-const Sidebar = ({ courseId }) => {
-  const { courses } = useStore();
-  const course = courses.find(c => c.id === Number(courseId));
-
-  if (!course) return null;
-
+export default function Sidebar({ course }) {
   return (
-    <aside className="bg-gray-100 p-4 w-60">
-      <div className="font-semibold mb-2 text-xl">{course.title}</div>
-      <nav>
-        {course.syllabus.map((mod, idx) =>
-          <div key={idx} className="mt-4">
-            <div className="text-lg text-blue-600">{mod.module}</div>
-            <ul className="ml-2">
-              {mod.lectures.map((lec,i) =>
-                <li key={i} className="py-1">
-                  <Link to={`/learning/${course.id}#${mod.module}-${lec}`}>{lec}</Link>
-                </li>
-              )}
-            </ul>
-          </div>
-        )}
-        <div className="mt-4">
-          <Link to={`/quiz/${course.id}/1`} className="text-blue-500">Quiz</Link>
+    <aside className="w-64 bg-gray-100 p-4 h-screen">
+      <h3 className="font-bold mb-4">{course?.title || "Course"}</h3>
+      {course?.modules?.map((m) => (
+        <div key={m.id} className="mb-3">
+          <p className="font-semibold">{m.title}</p>
+          <ul className="ml-3 mt-1">
+            {m.lectures.map((l) => (
+              <li key={l.id}>
+                <NavLink
+                  to={`/learning/${course.id}?lecture=${l.id}`}
+                  className="block hover:underline"
+                >
+                  {l.title}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
         </div>
-      </nav>
+      ))}
     </aside>
-  );
-};
-
-export default Sidebar;
+  )
+}
