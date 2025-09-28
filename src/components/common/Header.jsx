@@ -1,39 +1,38 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useStore } from "../../store/useStore";
+import { Link } from "react-router-dom"
+import { useStore } from "../../store/useStore"
+import { FaSearch } from "react-icons/fa"
 
-const Header = () => {
-  const { user, logout } = useStore();
+export default function Header() {
+  const { user, logout } = useStore()
+
   return (
-    <header className="bg-white shadow px-4 py-3 flex items-center justify-between">
-      <div className="flex items-center space-x-3">
-        <img src="/assets/logo.png" alt="logo" className="h-8"/>
-        <Link to="/" className="font-bold text-lg text-blue-700">LearnScape</Link>
-        <Link to="/catalog" className="text-gray-700 px-2">Courses</Link>
-        {user?.role === "instructor" && (
-          <Link to="/dashboard/instructor" className="text-gray-700 px-2">Instructor</Link>
-        )}
-      </div>
-      <div className="flex items-center space-x-4">
-        <input
-          type="search"
-          className="border rounded px-2 py-1"
-          placeholder="Search courses..."
-        />
-        {user ? (
-          <>
-            <Link to="/dashboard/student" className="px-2">
-              <img src={user.profilePic} alt="profile" className="h-8 w-8 rounded-full inline"/>
-              <span className="ml-1 text-gray-700">{user.name}</span>
-            </Link>
-            <button onClick={logout} className="bg-red-500 text-white px-3 py-1 rounded">Logout</button>
-          </>
-        ) : (
-          <Link to="/login" className="bg-blue-500 text-white px-3 py-1 rounded">Login</Link>
-        )}
+    <header className="bg-blue-600 text-white shadow-md">
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+        <Link to="/" className="text-xl font-bold">LearnScape</Link>
+        <nav className="space-x-6 hidden md:flex">
+          <Link to="/catalog">Courses</Link>
+          {user && <Link to="/dashboard">Dashboard</Link>}
+          {user?.role === "instructor" && <Link to="/instructor">Instructor</Link>}
+        </nav>
+        <div className="hidden md:block relative">
+          <input
+            type="text"
+            placeholder="Search courses..."
+            className="pl-8 pr-3 py-1 rounded-full w-60 text-gray-800"
+          />
+          <FaSearch className="absolute top-2 left-2 text-gray-500" />
+        </div>
+        <div className="space-x-4">
+          {user ? (
+            <button onClick={logout} className="bg-white text-blue-600 px-3 py-1 rounded">Logout</button>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register" className="bg-white text-blue-600 px-3 py-1 rounded">Register</Link>
+            </>
+          )}
+        </div>
       </div>
     </header>
-  );
-};
-
-export default Header;
+  )
+}
