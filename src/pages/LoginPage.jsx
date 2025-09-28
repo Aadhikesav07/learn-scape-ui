@@ -1,32 +1,29 @@
-import React, { useState } from "react";
-import { useStore } from "../store/useStore";
-import { useNavigate } from "react-router-dom";
-import Input from "../components/ui/Input";
-import Button from "../components/ui/Button";
+import { useState } from "react"
+import { useStore } from "../store/useStore"
+import Input from "../components/ui/Input"
+import Button from "../components/ui/Button"
+import { useNavigate } from "react-router-dom"
 
-const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const { login } = useStore();
-  const navigate = useNavigate();
+export default function LoginPage() {
+  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
+  const navigate = useNavigate()
+  const { login } = useStore()
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    login({ name: "Jane Doe", email, role: "student", profilePic: "/assets/logo.png" });
-    navigate("/dashboard/student");
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    login({ name, email, role: "student" })
+    navigate("/dashboard")
+  }
 
   return (
-    <div className="max-w-md mx-auto mt-24 bg-white rounded shadow p-8">
-      <h2 className="text-xl font-bold mb-4">Login</h2>
+    <div className="max-w-md mx-auto bg-white p-6 shadow rounded mt-12">
+      <h1 className="text-2xl font-bold mb-4">Login</h1>
       <form onSubmit={handleSubmit}>
-        <Input type="email" placeholder="Email" required value={email} onChange={e => setEmail(e.target.value)} />
-        <Button type="submit">Login</Button>
+        <Input label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+        <Input label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <Button type="submit" className="w-full">Login</Button>
       </form>
-      <div className="mt-4">
-        <a href="/register" className="text-blue-600">No account? Register</a>
-      </div>
     </div>
-  );
-};
-
-export default LoginPage;
+  )
+}
