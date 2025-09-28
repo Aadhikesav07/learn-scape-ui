@@ -1,49 +1,60 @@
-export const mockUser = {
-  id: 1,
-  name: "Jane Doe",
-  email: "jane@example.com",
-  role: "student", // or 'instructor', 'admin'
-  enrolledCourses: [1],
-  profilePic: "/assets/logo.png"
-};
-
 export const mockCourses = [
   {
     id: 1,
-    title: "Introduction to Data Science",
-    instructor: "Dr. Smith",
-    thumbnail: "/assets/logo.png",
-    description: "Learn the basics of Data Science, including stats, Python, and ML.",
-    syllabus: [
-      { module: "Getting Started", lectures: ["Welcome", "Setup", "Intro video"] },
-      { module: "Core Concepts", lectures: ["Statistics", "Python", "Regression"] }
-    ],
-    category: "Data Science",
-    materials: [{ type: "pdf", title: "Syllabus PDF", url: "#" }]
+    title: "Introduction to Programming",
+    instructor: "Jane Doe",
+    description: "Learn the basics of programming using Python.",
+    thumbnail: "https://via.placeholder.com/300x150",
+    modules: [
+      {
+        id: 1,
+        title: "Module 1: Basics",
+        lectures: [
+          { id: 1, title: "Lecture 1: What is Programming?", videoUrl: "https://www.youtube.com/watch?v=3Kq1MIfTWCE" },
+          { id: 2, title: "Lecture 2: Variables", videoUrl: "https://www.youtube.com/watch?v=kqtD5dpn9C8" }
+        ]
+      }
+    ]
   },
   {
     id: 2,
-    title: "Advanced React",
-    instructor: "Prof. Agarwal",
-    thumbnail: "/assets/logo.png",
-    description: "Deep dive into React hooks, context, testing, Redux.",
-    syllabus: [
-      { module: "Hooks", lectures: ["useState", "useEffect"] },
-      { module: "Redux", lectures: ["State Management", "Middleware"] }
-    ],
-    category: "Web Development",
-    materials: []
+    title: "Data Structures",
+    instructor: "John Smith",
+    description: "Learn about arrays, linked lists, and trees.",
+    thumbnail: "https://via.placeholder.com/300x150",
+    modules: [
+      {
+        id: 1,
+        title: "Module 1: Arrays",
+        lectures: [
+          { id: 1, title: "Lecture 1: Introduction to Arrays", videoUrl: "https://www.youtube.com/watch?v=WwfhLC16bis" }
+        ]
+      }
+    ]
   }
-];
+]
+
+export const mockQuizzes = [
+  {
+    id: 1,
+    title: "Programming Basics Quiz",
+    questions: [
+      {
+        id: "q1",
+        text: "What is a variable?",
+        options: ["A storage location", "A function", "A loop"]
+      }
+    ]
+  }
+]
 
 export const mockCertificates = [
   {
     id: 1,
-    userName: "Jane Doe",
-    courseName: "Introduction to Data Science",
-    date: "2025-09-27",
-    score: 87,
-    qrCode: "/assets/logo.png",
-    verifyUrl: "https://learnscape/verify/1"
+    courseId: 1,
+    studentName: "Alice",
+    courseName: "Introduction to Programming",
+    score: 92,
+    link: "https://learnscape.fake/cert/1"
   }
-];
+]
